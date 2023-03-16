@@ -4,7 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const errorController = require('./controllers/error');
-const MongoConnect=require('./util/database').mongoConnect;
+const mongoConnect=require('./util/database').mongoConnect;
+const User=require('./models/user');
 
 const app = express();
 
@@ -18,12 +19,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-  // User.findById(1)
-  //   .then(user => {
-  //     req.user = user;
-  //     next();
-  //   })
-  //   .catch(err => console.log(err));
+  User.findById("641351e21656b5786fb7b946")
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
   next();
 });
 
@@ -33,6 +34,6 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 
-MongoConnect(()=>{
+mongoConnect(()=>{
   app.listen(3000);
 })
